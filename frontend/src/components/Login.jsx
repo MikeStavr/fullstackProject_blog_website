@@ -20,14 +20,10 @@ export function Login() {
       sessionStorage.setItem("user", response);
       axios.defaults.headers.common["Authorization"] = `Bearer ${response}`;
       navigate("/home");
+      return;
     } else {
-      alert("Error logging in");
+      alert(`Invalid email or password.`);
     }
-
-    setUser({
-      email: "",
-      password: "",
-    });
   }
 
   function handleChange(e) {

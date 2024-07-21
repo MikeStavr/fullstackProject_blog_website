@@ -42,7 +42,6 @@ export function ReadBlog() {
       <p className="leading-7 [&:not(:first-child)]:mt-6 whitespace-pre-wrap text-left">
         {post.content}
       </p>
-      {console.log(post)}
       <i>By: {post.author == user._id ? user.name : post.author}</i>
     </div>
   );

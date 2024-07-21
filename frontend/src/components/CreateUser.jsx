@@ -14,8 +14,9 @@ export function CreateUser() {
     e.preventDefault();
     let response = await createUser(user);
     console.log(response);
-    if (response.status !== 200) {
+    if (response.data.error === "email_taken") {
       alert("Error creating user");
+      return;
     }
     setUser({
       name: "",

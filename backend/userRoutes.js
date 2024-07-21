@@ -46,7 +46,7 @@ userRoutes.route("/users").post(async (request, response) => {
     .findOne({ email: request.body.email });
 
   if (takenEmail) {
-    response.json({ message: "Email already taken." });
+    response.json({ error: "email_taken", message: "Email already taken." });
   } else {
     const hash = await bcrypt.hash(request.body.password, SALT_ROUNDS);
 
@@ -98,15 +98,24 @@ userRoutes.route("/users/login").post(async (request, response) => {
     .findOne({ email: request.body.email });
 
   if (user) {
-    let confirmation = bcrypt.compare(request.body.password, user.password);
+    let confirmation = await bcrypt.compare(
+      request.body.password,
+      user.password
+    );
     if (confirmation) {
       const token = jwt.sign(user, process.env.SECRET_KEY, { expiresIn: "1h" });
       response.json({ success: true, token });
     } else {
-      response.json({ success: false, message: "Incorrect password." });
+      response.json({
+        success: false,
+        message: "Incorrect password.",
+      });
     }
   } else {
-    response.json({ success: false, message: "User not found." });
+    response.json({
+      success: false,
+      message: "User not found.",
+    });
   }
 });
 
