@@ -33,43 +33,48 @@ export function CreateUser() {
   }
 
   return (
-    <form className="flex flex-col" onSubmit={(e) => handleSubmit(e)}>
-      <Input
-        type="text"
-        name="name"
-        value={user.name}
-        placeholder="Name"
-        onChange={handleChange}
-        required
-        maxLength={20}
-        className="mb-2"
-      />
+    <div>
+      <h1 className="text-primary mb-2 scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+        Create a new user!
+      </h1>
+      <form className="flex flex-col" onSubmit={(e) => handleSubmit(e)}>
+        <Input
+          type="text"
+          name="name"
+          value={user.name}
+          placeholder="Name"
+          onChange={handleChange}
+          required
+          maxLength={20}
+          className="mb-2"
+        />
 
-      <Input
-        type="email"
-        name="email"
-        value={user.email}
-        placeholder="Email"
-        onChange={handleChange}
-        required
-        maxLength={50}
-        className="mb-2"
-      />
+        <Input
+          type="email"
+          name="email"
+          value={user.email}
+          placeholder="Email"
+          onChange={handleChange}
+          required
+          maxLength={50}
+          className="mb-2"
+        />
 
-      <Input
-        type="password"
-        name="password"
-        value={user.password}
-        placeholder="Password"
-        onChange={handleChange}
-        required
-        maxLength={20}
-        className="mb-2"
-      />
+        <Input
+          type="password"
+          name="password"
+          value={user.password}
+          placeholder="Password"
+          onChange={handleChange}
+          required
+          maxLength={20}
+          className="mb-2"
+        />
 
-      <Button type="submit" className="mb-2">
-        Create account
-      </Button>
-    </form>
+        <Button type="submit" className="mb-2">
+          Create account
+        </Button>
+      </form>
+    </div>
   );
 }

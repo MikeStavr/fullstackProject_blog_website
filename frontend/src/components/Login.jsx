@@ -38,28 +38,33 @@ export function Login() {
   }
 
   return (
-    <form className="flex flex-col" onSubmit={(e) => handleSubmit(e)}>
-      <Input
-        type="email"
-        name="email"
-        placeholder="Email"
-        maxLength={50}
-        onChange={handleChange}
-        required
-        className="mb-2"
-      />
-      <Input
-        type="password"
-        name="password"
-        placeholder="Password"
-        maxLength={50}
-        onChange={handleChange}
-        required
-        className="mb-2"
-      />
-      <Button type="submit" className="mb-4">
-        Login
-      </Button>
-    </form>
+    <div>
+      <h1 className="text-primary mb-2 scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+        Login!
+      </h1>
+      <form className="flex flex-col" onSubmit={(e) => handleSubmit(e)}>
+        <Input
+          type="email"
+          name="email"
+          placeholder="Email"
+          maxLength={50}
+          onChange={handleChange}
+          required
+          className="mb-2"
+        />
+        <Input
+          type="password"
+          name="password"
+          placeholder="Password"
+          maxLength={50}
+          onChange={handleChange}
+          required
+          className="mb-2"
+        />
+        <Button type="submit" className="mb-4">
+          Login
+        </Button>
+      </form>
+    </div>
   );
 }
