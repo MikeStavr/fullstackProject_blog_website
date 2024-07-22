@@ -50,7 +50,7 @@ postRoutes.route("/posts").post(verifyToken, async (request, response) => {
 });
 
 // Update a post (/posts/:id)
-postRoutes.route("/posts").put(verifyToken, async (request, response) => {
+postRoutes.route("/posts/:id").put(verifyToken, async (request, response) => {
   let db = database.getDb();
   let mongoObject = {
     $set: {

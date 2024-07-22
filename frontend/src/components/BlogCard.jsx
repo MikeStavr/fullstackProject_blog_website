@@ -1,4 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
+import * as jwt_decode from "jwt-decode";
+import { useState } from "react";
+import { updatePost } from "@/api";
+import { useToast } from "@/components/ui/use-toast";
+
 import {
   Card,
   CardContent,
@@ -8,9 +13,9 @@ import {
 } from "@/components/ui/card";
 
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { deletePost } from "@/api";
-
-import * as jwt_decode from "jwt-decode";
 
 import {
   Dialog,
@@ -24,6 +29,16 @@ import {
 } from "@/components/ui/dialog";
 
 export function BlogCard({ post }) {
+  const [editedPost, setEditedPost] = useState({
+    title: post.title,
+    description: post.description,
+    content: post.content,
+    author: post.author,
+    dateCreated: post.dateCreated,
+  });
+
+  const { toast } = useToast();
+
   let date = new Date(post.dateCreated);
   let stringDate = date.toDateString();
 
@@ -32,6 +47,48 @@ export function BlogCard({ post }) {
   async function handleDelete(post) {
     deletePost(post._id);
     window.location.reload();
+  }
+
+  function handleChangedPost(e) {
+    setEditedPost({
+      ...editedPost,
+      [e.target.name]: e.target.value,
+    });
+  }
+
+  async function handleEditPost(post) {
+    if (
+      editedPost.title == "" ||
+      editedPost.description == "" ||
+      editedPost.content == ""
+    )
+      return;
+
+    if (
+      editedPost.title == post.title &&
+      editedPost.description == post.description &&
+      editedPost.content == post.content
+    ) {
+      toast({
+        title: "No changes made",
+        description: "You have not made any changes.",
+      });
+      return;
+    }
+    let response = await updatePost(post._id, editedPost);
+    console.log(response);
+    if (response) {
+      toast({
+        title: "Post updated",
+        description: "Your post has been updated.",
+      });
+      window.location.reload();
+    } else {
+      toast({
+        title: "Error",
+        description: "There was an error updating your post.",
+      });
+    }
   }
 
   return (
@@ -83,6 +140,63 @@ export function BlogCard({ post }) {
                 </DialogClose>
                 <DialogClose asChild>
                   <Button type="submit">No</Button>
+                </DialogClose>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+
+          {/* Edit post button */}
+
+          <Dialog className="min-h-full">
+            <DialogTrigger asChild>
+              <Button className="m-4 bg-yellow-500 hover:bg-yellow-500 cursor-pointer">
+                Edit Post
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>
+                  Editing post "<abbr title={post._id}>{post.title}"</abbr>
+                </DialogTitle>
+                <DialogDescription>Change the info below</DialogDescription>
+              </DialogHeader>
+              <div className="flex flex-col space-y-5">
+                <Input
+                  placeholder="Post title"
+                  value={editedPost.title}
+                  name="title"
+                  onChange={(e) => {
+                    handleChangedPost(e);
+                  }}
+                ></Input>
+                <Input
+                  placeholder="Post description"
+                  value={editedPost.description}
+                  name="description"
+                  onChange={(e) => {
+                    handleChangedPost(e);
+                  }}
+                ></Input>
+                <Textarea
+                  placeholder="Post content"
+                  className="h-48"
+                  value={editedPost.content}
+                  name="content"
+                  onChange={(e) => {
+                    handleChangedPost(e);
+                  }}
+                ></Textarea>
+              </div>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button type="submit" onClick={() => handleEditPost(post)}>
+                    Submit changes
+                  </Button>
+                </DialogClose>
+                <DialogClose asChild>
+                  <Button type="submit" className="bg-red-500 hover:bg-red-500">
+                    No
+                  </Button>
                 </DialogClose>
               </DialogFooter>
             </DialogContent>
